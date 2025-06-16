@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品总览 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .product-category {
+            padding: 50px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .product-category:last-child {
+            border-bottom: none;
+        }
+        
+        .category-header {
+            margin-bottom: 30px;
+        }
+        
+        .category-header h2 {
+            font-size: 24px;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+        }
+        
+        .category-header p {
+            font-size: 16px;
+            color: var(--medium-text);
+        }
+        
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .product-item h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .product-item p {
+            font-size: 14px;
+            color: var(--medium-text);
+            margin-bottom: 15px;
+            height: 60px;
+            overflow: hidden;
+        }
+        
+        .product-item a {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .product-item a:hover {
+            text-decoration: underline;
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 10px;
+            overflow-x: auto;
+        }
+        
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+        
+        .category-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .category-tab:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo-container">
+            <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+            <h1>简易云服务</h1>
+        </div>
+        <nav>
+            <a href="/">首页</a>
+            <a href="/activities">活动中心</a>
+            <a href="/products" class="active">产品</a>
+            <a href="/solutions">解决方案</a>
+            <a href="/pricing">定价</a>
+            <a href="/enterprise">企业中心</a>
+            <a href="/developer">开发者</a>
+
+            <div class="user-actions">
+                <!-- 未登录状态 -->
+                <div th:if="${user == null}">
+                    <a href="/login" class="btn-login">登录</a>
+                    <a href="/register" class="btn-register">注册</a>
+                </div>
+                <!-- 已登录状态 -->
+                <div th:if="${user != null}" class="logged-in-user">
+                    <span th:text="${'欢迎, ' + user.username}"></span>
+                    <a href="/logout" class="btn-logout">退出登录</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1>产品总览</h1>
+            <p>从基础设施到行业应用领域，简易云服务提供完善的产品体系，助力您的业务腾飞</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="category-tabs">
+            <div class="category-tab active" data-target="compute">计算</div>
+            <div class="category-tab" data-target="storage">存储</div>
+            <div class="category-tab" data-target="network">网络</div>
+            <div class="category-tab" data-target="security">安全</div>
+            <div class="category-tab" data-target="database">数据库</div>
+            <div class="category-tab" data-target="ai">人工智能</div>
+            <div class="category-tab" data-target="bigdata">大数据</div>
+        </div>
+        
+        <section id="compute" class="product-category">
+            <div class="category-header">
+                <h2>计算</h2>
+                <p>稳定、安全、弹性、高性能的云端计算服务，实时满足您的多样性业务需求</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-hdd-stack"></i></div>
+                    <h3>云服务器</h3>
+                    <p>稳定、安全、弹性、高性能的云端计算服务</p>
+                    <a href="/products/cvm">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-cpu"></i></div>
+                    <h3>GPU 云服务器</h3>
+                    <p>拥有高速计算与图形处理能力的云服务器</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-cpu"></i></div>
+                    <h3>轻量应用服务器</h3>
+                    <p>简单易用的云服务器，助您快速构建并管理轻量级应用</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-hdd-rack"></i></div>
+                    <h3>裸金属云服务器</h3>
+                    <p>按需购买、按量付费的物理服务器租赁服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-diagram-3"></i></div>
+                    <h3>弹性伸缩</h3>
+                    <p>自动化、具备计划性、高效且高容错性的低成本计算资源管理策略</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="network" class="product-category">
+            <div class="category-header">
+                <h2>网络</h2>
+                <p>提供高性能、高可靠的网络服务，满足各类业务场景的网络需求</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-globe"></i></div>
+                    <h3>弹性公网IP</h3>
+                    <p>提供独立的公网IP资源，满足网络访问与业务需求</p>
+                    <a href="/products/eip">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-hdd-network"></i></div>
+                    <h3>负载均衡</h3>
+                    <p>对多台云服务器进行流量分发的服务，提高应用系统的可用性</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-diagram-2"></i></div>
+                    <h3>私有网络</h3>
+                    <p>自定义的虚拟网络空间，帮助您构建安全隔离的网络环境</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-shield-fill-check"></i></div>
+                    <h3>安全组</h3>
+                    <p>虚拟防火墙，控制云资源的网络访问</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="storage" class="product-category">
+            <div class="category-header">
+                <h2>存储</h2>
+                <p>提供安全、可靠、低成本且易用的云存储服务，满足不同场景存储需求</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                    <h3>对象存储</h3>
+                    <p>安全稳定、海量、便捷、低延迟、低成本的云端存储服务</p>
+                    <a href="/products/cos">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-hdd-stack"></i></div>
+                    <h3>文件存储</h3>
+                    <p>适合多计算节点共享访问的分布式文件存储服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-hdd-stack"></i></div>
+                    <h3>云硬盘</h3>
+                    <p>高可用、高可靠、低成本、可定制化的网络块存储服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="security" class="product-category">
+            <div class="category-header">
+                <h2>安全</h2>
+                <p>全方位保护您的云上资产和业务安全，构建立体防御体系</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-shield-check"></i></div>
+                    <h3>网络安全</h3>
+                    <p>提供全方位的安全防护，保障您的业务稳定运行</p>
+                    <a href="/products/security">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-lock"></i></div>
+                    <h3>Web应用防火墙</h3>
+                    <p>防护网站和应用免受各种Web攻击</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-shield-exclamation"></i></div>
+                    <h3>DDoS防护</h3>
+                    <p>防御大流量DDoS攻击，保障业务稳定</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-person-badge"></i></div>
+                    <h3>身份认证</h3>
+                    <p>集中管理用户身份和访问权限的服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="database" class="product-category">
+            <div class="category-header">
+                <h2>数据库</h2>
+                <p>高性能、可靠、安全、易用的云数据库服务，满足各种数据管理需求</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-database-fill"></i></div>
+                    <h3>MySQL 云数据库</h3>
+                    <p>安全可靠、高性能、可弹性伸缩的MySQL数据库服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-database-lock"></i></div>
+                    <h3>Redis 云数据库</h3>
+                    <p>高可用、高性能的Redis缓存和存储服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-database-check"></i></div>
+                    <h3>MongoDB 云数据库</h3>
+                    <p>安全、稳定、高效的MongoDB文档数据库服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai" class="product-category">
+            <div class="category-header">
+                <h2>人工智能</h2>
+                <p>提供全面的AI能力，助力企业实现业务智能化升级</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-cpu"></i></div>
+                    <h3>机器学习平台</h3>
+                    <p>提供一站式机器学习服务，降低AI应用门槛</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-chat-dots"></i></div>
+                    <h3>自然语言处理</h3>
+                    <p>智能文本分析和理解服务，提升业务效率</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-camera"></i></div>
+                    <h3>计算机视觉</h3>
+                    <p>提供图像识别和分析能力，适用于多种场景</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="bigdata" class="product-category">
+            <div class="category-header">
+                <h2>大数据</h2>
+                <p>全栈大数据分析与处理服务，释放数据价值</p>
+            </div>
+            <div class="product-list">
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-bar-chart"></i></div>
+                    <h3>大数据处理平台</h3>
+                    <p>高效处理海量数据，提供灵活计算框架</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-graph-up"></i></div>
+                    <h3>数据可视化</h3>
+                    <p>直观展现数据洞察，辅助决策分析</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon"><i class="bi bi-arrow-left-right"></i></div>
+                    <h3>数据传输服务</h3>
+                    <p>安全、高效的数据迁移与同步服务</p>
+                    <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div class="back-to-top">
+        <i class="bi bi-arrow-up"></i>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>产品服务</h4>
+                <a href="/products/cvm">云服务器</a>
+                <a href="/products/security">云安全</a>
+                <a href="/products/cos">云存储</a>
+                <a href="/products/eip">网络服务</a>
+            </div>
+            <div class="footer-col">
+                <h4>解决方案</h4>
+                <a href="/solutions/finance">金融</a>
+                <a href="/solutions/education">教育</a>
+            </div>
+            <div class="footer-col">
+                <h4>开发者资源</h4>
+                <a href="/developer/api">API文档</a>
+                <a href="/developer/sdk">SDK</a>
+                <a href="/developer">工具</a>
+            </div>
+            <div class="footer-col">
+                <h4>关于我们</h4>
+                <a href="/about">公司介绍</a>
+                <a href="/contact">联系我们</a>
+                <a href="/partners">合作伙伴</a>
+                <a href="/terms">服务条款</a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <h4>友情链接</h4>
+            <div class="links-grid">
+                <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                <a href="/partners">查看全部合作伙伴</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 简易云服务。保留所有权利。</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // 分类标签点击切换
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // 移除所有active类
+            document.querySelectorAll('.category-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            // 给当前点击的标签添加active类
+            this.classList.add('active');
+            
+            // 滚动到对应的分类部分
+            const targetId = this.getAttribute('data-target');
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // 返回顶部按钮
+    const backToTopBtn = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+</script>
+</body>
+</html> 

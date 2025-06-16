@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>免费产品试用 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .trial-banner {
+            background: linear-gradient(135deg, #2D62ED 0%, #00A4FF 100%);
+            padding: 60px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .trial-banner h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .trial-banner p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .tag-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .filter-bar {
+            background: white;
+            padding: 20px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-label {
+            font-size: 14px;
+            color: var(--dark-text);
+            margin-right: 10px;
+        }
+        
+        .filter-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-option {
+            padding: 6px 12px;
+            background: #f5f7fa;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        
+        .filter-option:hover, .filter-option.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .search-bar {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .search-input {
+            width: 250px;
+            padding: 8px 12px;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .product-trial-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .product-trial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-category {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .card-tag {
+            background: #E6F7FF;
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-text);
+        }
+        
+        .card-specs {
+            display: inline-block;
+            background: #F5F5F5;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .card-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+        
+        .card-feature i {
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .card-description {
+            margin: 15px 0;
+            font-size: 14px;
+            color: var(--medium-text);
+            line-height: 1.5;
+        }
+        
+        .card-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .trial-period {
+            font-size: 14px;
+            color: var(--medium-text);
+        }
+        
+        .trial-btn {
+            padding: 8px 20px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .trial-btn:hover {
+            background: var(--secondary-color);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .page-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e8e8e8;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .page-item:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .page-item:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .page-item.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .info-section {
+            padding: 60px 0;
+            background: #f5f7fa;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .info-card h3 {
+            color: var(--dark-text);
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-card h3 i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .info-card p {
+            color: var(--medium-text);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .faq-section {
+            padding: 60px 0;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 30px auto 0;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 20px 0;
+        }
+        
+        .faq-question {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark-text);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding-top: 15px;
+            font-size: 14px;
+            color: var(--medium-text);
+            line-height: 1.6;
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .hot-experiences {
+            padding: 60px 0;
+            background: var(--light-bg);
+        }
+        
+        .experiences-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .experience-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .experience-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .experience-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .experience-content {
+            padding: 20px;
+        }
+        
+        .experience-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--dark-text);
+        }
+        
+        .experience-content p {
+            font-size: 14px;
+            color: var(--medium-text);
+            margin-bottom: 15px;
+        }
+        
+        .experience-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        
+        .experience-btn:hover {
+            background: var(--secondary-color);
+        }
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo-container">
+            <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+            <h1>简易云服务</h1>
+        </div>
+        <nav>
+            <a href="/">首页</a>
+            <a href="/activities" class="active">活动中心</a>
+            <a href="/products">产品</a>
+            <a href="/solutions">解决方案</a>
+            <a href="/pricing">定价</a>
+            <a href="/enterprise">企业中心</a>
+            <a href="/developer">开发者</a>
+            <div class="user-actions">
+                <!-- 未登录状态 -->
+                <div th:if="${user == null}">
+                    <a href="/login" class="btn-login">登录</a>
+                    <a href="/register" class="btn-register">注册</a>
+                </div>
+                <!-- 已登录状态 -->
+                <div th:if="${user != null}" class="logged-in-user">
+                    <span th:text="${'欢迎, ' + user.username}"></span>
+                    <a href="/logout" class="btn-logout">退出登录</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="trial-banner">
+    <div class="container">
+        <h2>超60款云产品免费试用</h2>
+        <div class="tag-row">
+            <div class="tag">60+企业免费</div>
+            <div class="tag">50+个人免费</div>
+            <div class="tag">8款会员专属</div>
+        </div>
+        <p>腾讯云产品新用户均可参与试用。云服务器试用后续费最低3.5折</p>
+    </div>
+</div>
+
+<div class="filter-bar">
+    <div class="container">
+        <div class="filter-container">
+            <div class="filter-group">
+                <span class="filter-label">适用人群：</span>
+                <div class="filter-options">
+                    <div class="filter-option active">全部</div>
+                    <div class="filter-option">个人认证</div>
+                    <div class="filter-option">企业认证</div>
+                    <div class="filter-option">会员专享</div>
+                </div>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">云产品类型：</span>
+                <div class="filter-options">
+                    <div class="filter-option active">全部</div>
+                    <div class="filter-option">云服务器</div>
+                    <div class="filter-option">数据库</div>
+                    <div class="filter-option">网站建设</div>
+                    <div class="filter-option">安全防护</div>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="搜索产品...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <section class="container" style="padding: 40px 0;">
+        <h2 class="section-title">试用专区</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 30px; color: var(--medium-text);">
+            为您展示70款试用产品，商品每日限量，试用后仍可参与首单特惠
+        </p>
+        
+        <div class="products-grid">
+            <div class="product-trial-card">
+                <div class="card-header">
+                    <span class="card-category">云服务器</span>
+                    <span class="card-tag">不限个企</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">轻量应用服务器</h3>
+                    <div class="card-specs">2核2G3M1个月</div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>入门简单，开箱即用</span>
+                    </div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>高性价比，稳定可靠</span>
+                    </div>
+                    <div class="card-description">
+                        试用配置：2核2G、3Mbps带宽、40GB系统盘、200G流量包<br>
+                        适用场景：适用于构建网站、小程序/小游戏、电商、云盘/图床以及各类开发测试和学习环境等轻量应用场景<br>
+                        适用人群：中小企业和个人开发者
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="trial-period">1个月</div>
+                    <a href="#" class="trial-btn">立即试用</a>
+                </div>
+            </div>
+            
+            <div class="product-trial-card">
+                <div class="card-header">
+                    <span class="card-category">云服务器</span>
+                    <span class="card-tag">不限个企</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">轻量应用服务器高配版</h3>
+                    <div class="card-specs">4核8G12M1个月</div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>基于英特尔至强可扩展处理器</span>
+                    </div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>高性价比，稳定可靠</span>
+                    </div>
+                    <div class="card-description">
+                        试用配置：4核8G、12Mbps带宽、180GB系统盘、2000G流量包<br>
+                        适用场景：适用于构建网站、小程序/小游戏、电商、云盘/图床以及各类开发测试和学习环境等轻量应用场景<br>
+                        适用人群：中小企业
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="trial-period">1个月</div>
+                    <a href="#" class="trial-btn">立即试用</a>
+                </div>
+            </div>
+            
+            <div class="product-trial-card">
+                <div class="card-header">
+                    <span class="card-category">网站建设</span>
+                    <span class="card-tag">不限个企</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">云官网建站-尊享版(含服务器)</h3>
+                    <div class="card-specs">2核4G3M1个月</div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>可视化操作界面，集成域名绑定、SSL证书部署等</span>
+                    </div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>无需代码，可视化AI建站，数据一次编辑，多端同步</span>
+                    </div>
+                    <div class="card-description">
+                        试用配置：腾讯云服务器S5 2核4G3M<br>
+                        适用场景：适用于企业官网的搭建、展示、推广等，覆盖互联网/工业/旅游/科技等多场景<br>
+                        适用人群：中小企业和开发者
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="trial-period">1个月</div>
+                    <a href="#" class="trial-btn">立即试用</a>
+                </div>
+            </div>
+            
+            <div class="product-trial-card">
+                <div class="card-header">
+                    <span class="card-category">云服务器</span>
+                    <span class="card-tag">不限个企</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">CVM蜂驰型-2核4G3M</h3>
+                    <div class="card-specs">2核4GB7天</div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>提供达99.975%的服务可用性和9个9的数据可靠性</span>
+                    </div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>灵活的计费方式，极大节省您基础设施和维护成本</span>
+                    </div>
+                    <div class="card-description">
+                        试用配置：CVM蜂驰型 2核4G3M<br>
+                        适用场景：适用于网站搭建、电商、直播、游戏、数据库、大数据等广泛场景，提供基础算力服务<br>
+                        适用人群：中小企业和开发者
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="trial-period">7天</div>
+                    <a href="#" class="trial-btn">立即试用</a>
+                </div>
+            </div>
+            
+            <div class="product-trial-card">
+                <div class="card-header">
+                    <span class="card-category">云服务器</span>
+                    <span class="card-tag">不限个企</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">标准云服务器</h3>
+                    <div class="card-specs">2核2G3M1个月</div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>提供达99.975%的服务可用性和9个9的数据可靠性</span>
+                    </div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>灵活的计费方式，极大节省您基础设施和维护成本</span>
+                    </div>
+                    <div class="card-description">
+                        试用配置：2核2G、3Mbps带宽、50GB系统盘<br>
+                        适用场景：适用于网站搭建、电商、直播、游戏、数据库、大数据等广泛场景，提供基础算力服务<br>
+                        适用人群：中小企业
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="trial-period">1个月</div>
+                    <a href="#" class="trial-btn">立即试用</a>
+                </div>
+            </div>
+            
+            <div class="product-trial-card">
+                <div class="card-header">
+                    <span class="card-category">云数据库</span>
+                    <span class="card-tag">企业专享</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">MySQL云数据库</h3>
+                    <div class="card-specs">1核2G25GB</div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>提供多可用区自动容灾，实现99.95%业务可用性</span>
+                    </div>
+                    <div class="card-feature">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>支持数据加密、安全组、VPC网络等，保障数据安全</span>
+                    </div>
+                    <div class="card-description">
+                        试用配置：1核2G内存、25GB存储空间<br>
+                        适用场景：适用于各种Web应用、电商系统、企业办公系统等<br>
+                        适用人群：中小企业和开发者
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="trial-period">15天</div>
+                    <a href="#" class="trial-btn">立即试用</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pagination">
+            <div class="page-item active">1</div>
+            <div class="page-item">2</div>
+            <div class="page-item">3</div>
+            <div class="page-item">4</div>
+            <div class="page-item">5</div>
+            <div class="page-item">6</div>
+            <div class="page-item">></div>
+        </div>
+    </section>
+    
+    <section class="hot-experiences">
+        <div class="container">
+            <h2 class="section-title">热门体验</h2>
+            <div class="experiences-grid">
+                <div class="experience-card">
+                    <div class="experience-image" style="background-image: url('https://placekitten.com/800/400');"></div>
+                    <div class="experience-content">
+                        <h3>音视频 Demo体验馆</h3>
+                        <p>1分钟跑通Demo，30分钟上线</p>
+                        <a href="#" class="experience-btn">立即体验</a>
+                    </div>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="experience-image" style="background-image: url('https://placekitten.com/801/400');"></div>
+                    <div class="experience-content">
+                        <h3>数据万象体验馆</h3>
+                        <p>无门槛一键处理图片、音视频</p>
+                        <a href="#" class="experience-btn">立即体验</a>
+                    </div>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="experience-image" style="background-image: url('https://placekitten.com/802/400');"></div>
+                    <div class="experience-content">
+                        <h3>云安全产品一键试用</h3>
+                        <p>七大安全产品限时免费试用</p>
+                        <a href="#" class="experience-btn">立即体验</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">常见问题</h2>
+            <div class="faq-list">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>为什么我无法参与免费体验？</span>
+                        <i class="bi bi-chevron-up"></i>
+                    </div>
+                    <div class="faq-answer">
+                        产品免费体验仅对产品新用户开放，已购买、体验过对应产品（包括包年包月和按量付费）的用户不能参加该活动。如您的账号无产品使用记录，可能您名下的其他账号使用过，请查找同实名认证主体下的所有账号。
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>我可以体验多长时间？</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        不同产品提供的免费体验时长、配置不同，可根据产品说明中的"体验配置"对应查看。
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>体验到期后怎么办呢？</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        产品体验到期前，您可在产品控制台进行续费。云服务器产品试用后续费最低享3.5折优惠。如产品没有做额外说明，则您免费体验后仍可参加首单特惠。
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>为什么我取消订单了，就不可以体验了？</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        若订单提交未支付将占用购体验资格，建议您在完成已有订单状态后再继续选购，查看未完成支付订单，您可以选择完成订单，或取消订单后重新体验。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="info-section">
+        <div class="container">
+            <h2 class="section-title">技术分享交流</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3><i class="bi bi-chat-dots"></i>互动问答</h3>
+                    <p>与专业技术人员和开发者社区交流，快速解决您的技术问题</p>
+                    <a href="#" class="btn-outline" style="margin-top: 15px; display: inline-block;">前往问答</a>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="bi bi-journal-text"></i>精选文章</h3>
+                    <p>阅读最新技术动态、最佳实践和解决方案分享</p>
+                    <a href="#" class="btn-outline" style="margin-top: 15px; display: inline-block;">查看文章</a>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="bi bi-play-circle"></i>技术视频</h3>
+                    <p>观看产品教程、技术讲解和实战案例分析视频</p>
+                    <a href="#" class="btn-outline" style="margin-top: 15px; display: inline-block;">观看视频</a>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="bi bi-mortarboard"></i>在线课程</h3>
+                    <p>参加认证考试、动手实验和企业培训，提升专业技能</p>
+                    <a href="#" class="btn-outline" style="margin-top: 15px; display: inline-block;">开始学习</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>产品服务</h4>
+                <a href="/products/cvm">云服务器</a>
+                <a href="/products/security">云安全</a>
+                <a href="/products/cos">云存储</a>
+                <a href="/products/eip">网络服务</a>
+            </div>
+            <div class="footer-col">
+                <h4>解决方案</h4>
+                <a href="/solutions/finance">金融</a>
+                <a href="/solutions/education">教育</a>
+            </div>
+            <div class="footer-col">
+                <h4>开发者资源</h4>
+                <a href="/developer/api">API文档</a>
+                <a href="/developer/sdk">SDK</a>
+                <a href="/developer">工具</a>
+            </div>
+            <div class="footer-col">
+                <h4>关于我们</h4>
+                <a href="/about">公司介绍</a>
+                <a href="/contact">联系我们</a>
+                <a href="/partners">合作伙伴</a>
+                <a href="/terms">服务条款</a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <h4>友情链接</h4>
+            <div class="links-grid">
+                <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                <a href="/partners">查看全部合作伙伴</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 简易云服务。保留所有权利。</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ点击展开/收起
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', function() {
+            item.classList.toggle('active');
+            
+            const icon = this.querySelector('i');
+            if (item.classList.contains('active')) {
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+            } else {
+                icon.classList.remove('bi-chevron-up');
+                icon.classList.add('bi-chevron-down');
+            }
+        });
+    });
+    
+    // 过滤选项点击
+    const filterOptions = document.querySelectorAll('.filter-option');
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // 只在同一个过滤组内切换
+            const parent = this.parentElement;
+            const siblings = parent.querySelectorAll('.filter-option');
+            siblings.forEach(sib => sib.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    // 分页点击
+    const pageItems = document.querySelectorAll('.page-item');
+    pageItems.forEach(item => {
+        item.addEventListener('click', function() {
+            pageItems.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+</script>
+</body>
+</html> 

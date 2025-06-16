@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者中心 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .dev-banner {
+            background: linear-gradient(135deg, #2568ef, #3f89f8);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .dev-banner h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .dev-banner p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .section {
+            padding: 70px 0;
+        }
+        
+        .section:nth-child(even) {
+            background-color: #f8f9fc;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .section-title p {
+            color: var(--medium-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #e3f2fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .feature-card p {
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        
+        .feature-card .btn-outline {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .feature-card .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .tool-content {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-content h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .tool-content p {
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        
+        .tool-content .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            transition: background-color 0.2s;
+            align-self: flex-start;
+        }
+        
+        .tool-content .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .tag-list {
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .resources-section {
+            background: linear-gradient(to right, #f0f4f8, #e6f0ff);
+        }
+        
+        .resource-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .resource-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .resource-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .resource-card li {
+            margin-bottom: 12px;
+        }
+        
+        .resource-card a {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .resource-card a i {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+                <h1>简易云服务</h1>
+            </div>
+            <nav>
+                <a href="/">首页</a>
+                <a href="/activities">活动中心</a>
+                <a href="/products">产品</a>
+                <a href="/solutions">解决方案</a>
+                <a href="/pricing">定价</a>
+                <a href="/enterprise">企业中心</a>
+                <a href="/developer" class="active">开发者</a>
+
+                <div class="user-actions">
+                    <!-- 未登录状态 -->
+                    <div th:if="${user == null}">
+                        <a href="/login" class="btn-login">登录</a>
+                        <a href="/register" class="btn-register">注册</a>
+                    </div>
+                    <!-- 已登录状态 -->
+                    <div th:if="${user != null}" class="logged-in-user">
+                        <span th:text="${'欢迎, ' + user.username}"></span>
+                        <a href="/logout" class="btn-logout">退出登录</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dev-banner">
+        <div class="container">
+            <h1>简易云开发者中心</h1>
+            <p>面向开发者汇聚海量精品云计算使用和开发经验，营造开放的云计算技术生态圈</p>
+        </div>
+    </div>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>开发者工具</h2>
+                    <p>为开发者提供丰富的生态工具，助您无忧上云</p>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-content">
+                            <h3>API 中心</h3>
+                            <div class="tag-list">
+                                <span class="tag">接口调用</span>
+                                <span class="tag">在线调试</span>
+                            </div>
+                            <p>简易云 API 全新升级 3.0，助您快捷使用云产品。提供强大的在线检索调试工具，让API调用更便捷，支持多种编程语言。</p>
+                            <a href="/developer/api" class="btn-primary">前往 API 中心</a>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-content">
+                            <h3>SDK 中心</h3>
+                            <div class="tag-list">
+                                <span class="tag">开发工具包</span>
+                                <span class="tag">多语言支持</span>
+                            </div>
+                            <p>提供多种编程语言的SDK开发工具包，包括Java、Python、PHP、Node.js等，帮助您快速集成云服务能力到您的应用中。</p>
+                            <a href="/developer/sdk" class="btn-primary">前往 SDK 中心</a>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-content">
+                            <h3>帮助文档</h3>
+                            <div class="tag-list">
+                                <span class="tag">产品指南</span>
+                                <span class="tag">教程</span>
+                            </div>
+                            <p>丰富的文档资源，包括产品介绍、操作指南、最佳实践和常见问题解答，助您快速上手云服务。</p>
+                            <a href="#" class="btn-primary">前往帮助文档</a>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-content">
+                            <h3>命令行工具</h3>
+                            <div class="tag-list">
+                                <span class="tag">CLI</span>
+                                <span class="tag">自动化</span>
+                            </div>
+                            <p>可以快速调用简易云 API 来管理您的云资源，支持跨平台使用，实现云资源管理自动化。</p>
+                            <a href="#" class="btn-primary">了解命令行工具</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>开发者生态</h2>
+                    <p>面向开发者的技术分享、实践成长的生态平台</p>
+                </div>
+                
+                <div class="card-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3>开发者社区</h3>
+                        <p>营造云计算技术生态圈，打造技术分享型社区，与广大开发者共同交流、学习和成长。</p>
+                        <a href="#" class="btn-outline">访问开发者社区</a>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <h3>学习中心</h3>
+                        <p>面向广大云生态用户的一站式学习成长平台，提供在线课程、实战训练和技术认证。</p>
+                        <a href="#" class="btn-outline">前往学习中心</a>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+                        <h3>开源生态</h3>
+                        <p>汇聚天下开源之力，建设云服务开源生态，提供优质的开源项目和开发者资源。</p>
+                        <a href="#" class="btn-outline">了解开源生态</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section resources-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>开发资源</h2>
+                    <p>丰富的学习资源，帮助开发者快速掌握云服务技能</p>
+                </div>
+                
+                <div class="card-grid">
+                    <div class="resource-card">
+                        <h3>技术文档</h3>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 快速入门指南</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 产品文档</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> API参考</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> SDK使用指南</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 常见问题解答</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>学习与培训</h3>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 在线课程</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 动手实验</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 技术认证</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 技术沙龙视频</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 企业培训</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>开发工具</h3>
+                        <ul>
+                            <li><a href="/developer/api"><i class="bi bi-arrow-right-circle"></i> API中心</a></li>
+                            <li><a href="/developer/sdk"><i class="bi bi-arrow-right-circle"></i> SDK中心</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 命令行工具</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 开发者工具包</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 示例代码</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>技术支持</h3>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 技术社区</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 问答社区</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 最佳实践</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right-circle"></i> 架构中心</a></li>
+                            <li><a href="/contact"><i class="bi bi-arrow-right-circle"></i> 联系支持</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>免费体验套餐</h2>
+                    <p>立即领取多款产品的免费体验套餐，伴您快速上云</p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="/activities/free-trial" class="btn-primary">免费体验</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>产品服务</h4>
+                    <a href="/products/cvm">云服务器</a>
+                    <a href="/products/security">云安全</a>
+                    <a href="/products/cos">云存储</a>
+                    <a href="/products/eip">网络服务</a>
+                </div>
+                <div class="footer-col">
+                    <h4>解决方案</h4>
+                    <a href="/solutions/finance">金融</a>
+                    <a href="/solutions/education">教育</a>
+                </div>
+                <div class="footer-col">
+                    <h4>开发者资源</h4>
+                    <a href="/developer/api">API文档</a>
+                    <a href="/developer/sdk">SDK</a>
+                    <a href="/developer">工具</a>
+                </div>
+                <div class="footer-col">
+                    <h4>关于我们</h4>
+                    <a href="/about">公司介绍</a>
+                    <a href="/contact">联系我们</a>
+                    <a href="/partners">合作伙伴</a>
+                    <a href="/terms">服务条款</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>友情链接</h4>
+                <div class="links-grid">
+                    <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                    <a href="/partners">查看全部合作伙伴</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 简易云服务。保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

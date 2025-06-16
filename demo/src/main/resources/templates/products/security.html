@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络安全 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #2568ef, #3f89f8);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .hero-text h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .hero-text p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 16px;
+            color: var(--medium-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card p {
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .security-layers {
+            margin-top: 50px;
+        }
+        
+        .layers-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
+        
+        .layer {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f7f9fc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .layer-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-right: 20px;
+            background: rgba(37, 104, 239, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .layer-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .layer-content p {
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .solutions-section {
+            background: #f5f7fa;
+        }
+        
+        .solution-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .solution-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .solution-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+            padding-top: 30px;
+        }
+        
+        .solution-content {
+            padding: 0 20px 30px;
+            text-align: center;
+        }
+        
+        .solution-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .solution-content p {
+            font-size: 15px;
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .solution-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .solution-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .solution-content a i {
+            margin-left: 5px;
+        }
+        
+        .stats-section {
+            background: linear-gradient(to right, #f0f4f8, #f7f9fc);
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .stat-item {
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: var(--dark-text);
+        }
+        
+        .cases-section {
+            background: #fff;
+        }
+        
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .case-card {
+            background: #f7f9fc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .case-image {
+            height: 180px;
+            background-color: #e0e0e0;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .case-content {
+            padding: 20px;
+        }
+        
+        .case-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .case-content p {
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .case-content .case-industry {
+            display: inline-block;
+            background: rgba(37, 104, 239, 0.1);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .faq-section {
+            background: #f5f7fa;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 18px;
+        }
+        
+        .faq-answer {
+            padding-top: 15px;
+            border-top: 1px solid #eaeaea;
+            margin-top: 15px;
+            display: none;
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #2568ef, #3f89f8);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .cta-content h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-content p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo-container">
+            <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+            <h1>简易云服务</h1>
+        </div>
+        <nav>
+            <a href="/">首页</a>
+            <a href="/activities">活动中心</a>
+            <a href="/products" class="active">产品</a>
+            <a href="/solutions">解决方案</a>
+            <a href="/pricing">定价</a>
+            <a href="/enterprise">企业中心</a>
+            <a href="/developer">开发者</a>
+
+            <div class="user-actions">
+                <!-- 未登录状态 -->
+                <div th:if="${user == null}">
+                    <a href="/login" class="btn-login">登录</a>
+                    <a href="/register" class="btn-register">注册</a>
+                </div>
+                <!-- 已登录状态 -->
+                <div th:if="${user != null}" class="logged-in-user">
+                    <span th:text="${'欢迎, ' + user.username}"></span>
+                    <a href="/logout" class="btn-logout">退出登录</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>网络安全</h1>
+                <p>提供全方位的网络安全防护服务，有效抵御DDoS攻击、Web入侵、数据泄露等安全威胁，保障您的业务安全稳定运行。</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn-primary">立即体验</a>
+                    <a href="#" class="btn-outline light">安全评估</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img th:src="@{/img/security-illustration.png}" alt="网络安全插图" src="https://placekitten.com/600/400">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>全面的安全防护能力</h2>
+            <p>从攻击防御到数据保护，构建多层次安全防御体系</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-shield-shaded"></i></div>
+                <h3>DDoS 防护</h3>
+                <p>提供高达T级的DDoS攻击防护能力，抵御SYN Flood、UDP Flood、ICMP Flood等各类攻击，保障业务可用性。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-bricks"></i></div>
+                <h3>Web 应用防火墙</h3>
+                <p>防御SQL注入、XSS跨站、木马上传等Web攻击，保护网站和Web应用的安全。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-person-badge"></i></div>
+                <h3>身份认证</h3>
+                <p>提供多因素认证、单点登录、权限管理等功能，确保只有授权用户才能访问您的系统和数据。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-file-lock"></i></div>
+                <h3>数据加密</h3>
+                <p>支持传输加密和存储加密，保护敏感数据安全，防止数据泄露和未授权访问。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-bug"></i></div>
+                <h3>漏洞扫描</h3>
+                <p>定期扫描系统漏洞，及时发现并修复安全隐患，降低被攻击的风险。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-activity"></i></div>
+                <h3>安全审计</h3>
+                <p>记录和分析系统活动日志，实时监控异常行为，有效追踪和溯源安全事件。</p>
+            </div>
+        </div>
+        
+        <div class="security-layers">
+            <div class="section-title">
+                <h2>多层次安全防护体系</h2>
+                <p>通过部署多层防御架构，有效抵御来自各个层面的安全威胁</p>
+            </div>
+            
+            <div class="layers-container">
+                <div class="layer">
+                    <div class="layer-icon">
+                        <i class="bi bi-globe"></i>
+                    </div>
+                    <div class="layer-content">
+                        <h3>网络层防护</h3>
+                        <p>部署高性能防火墙和DDoS防护系统，过滤恶意流量，防止网络层攻击，确保网络通信安全可靠。</p>
+                    </div>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-icon">
+                        <i class="bi bi-window"></i>
+                    </div>
+                    <div class="layer-content">
+                        <h3>应用层防护</h3>
+                        <p>Web应用防火墙实时监控和过滤HTTP/HTTPS流量，防御SQL注入、XSS跨站脚本、CSRF跨站请求伪造等应用层攻击。</p>
+                    </div>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <div class="layer-content">
+                        <h3>身份认证与访问控制</h3>
+                        <p>实施严格的身份认证和权限管理，确保只有授权用户才能访问系统资源，减少未授权访问和内部威胁风险。</p>
+                    </div>
+                </div>
+                
+                <div class="layer">
+                    <div class="layer-icon">
+                        <i class="bi bi-cpu"></i>
+                    </div>
+                    <div class="layer-content">
+                        <h3>数据安全层</h3>
+                        <p>通过数据加密、脱敏、防泄漏等技术，保护敏感数据在传输和存储过程中的安全，防止数据泄露和窃取。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section solutions-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>安全解决方案</h2>
+            <p>针对不同场景和需求，提供专业的安全解决方案</p>
+        </div>
+        
+        <div class="solution-cards">
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="bi bi-cloud-check"></i>
+                </div>
+                <div class="solution-content">
+                    <h3>云平台安全</h3>
+                    <p>全方位保护云上资源，包括主机安全、容器安全、网络安全、身份认证等，构建安全可靠的云上环境。</p>
+                    <a href="#">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="bi bi-globe"></i>
+                </div>
+                <div class="solution-content">
+                    <h3>网站安全</h3>
+                    <p>针对网站和Web应用，提供DDoS防护、Web防火墙、证书管理等服务，保障网站安全稳定运行。</p>
+                    <a href="#">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+                <div class="solution-content">
+                    <h3>数据安全</h3>
+                    <p>提供数据加密、脱敏、分级分类、安全审计等功能，全方位保护企业数据资产，防止数据泄露和损失。</p>
+                    <a href="#">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="bi bi-phone"></i>
+                </div>
+                <div class="solution-content">
+                    <h3>移动应用安全</h3>
+                    <p>针对移动应用提供代码安全、通信安全、运行环境安全等全方位防护，确保移动应用的安全性。</p>
+                    <a href="#">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="bi bi-bank"></i>
+                </div>
+                <div class="solution-content">
+                    <h3>金融级安全</h3>
+                    <p>针对金融行业的特殊需求，提供合规、高可用、高安全性的解决方案，满足监管要求和业务需求。</p>
+                    <a href="#">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="solution-card">
+                <div class="solution-icon">
+                    <i class="bi bi-bank"></i>
+                </div>
+                <div class="solution-content">
+                    <h3>等保合规</h3>
+                    <p>帮助企业满足等级保护要求，提供咨询、评估、整改、认证等全流程服务，顺利通过等保测评。</p>
+                    <a href="#">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section stats-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>安全防护实力</h2>
+            <p>以实力数据彰显我们的安全防护能力</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">10T+</div>
+                <div class="stat-label">DDoS防护峰值</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-value">99.99%</div>
+                <div class="stat-label">防护成功率</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-value">20000+</div>
+                <div class="stat-label">每日拦截攻击次数</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-value">1000+</div>
+                <div class="stat-label">安全专家团队</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">全天候监控</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section cases-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>客户案例</h2>
+            <p>了解我们如何帮助不同行业的客户解决安全挑战</p>
+        </div>
+        
+        <div class="case-grid">
+            <div class="case-card">
+                <div class="case-image" style="background-image: url('https://placekitten.com/600/300');"></div>
+                <div class="case-content">
+                    <span class="case-industry">金融行业</span>
+                    <h3>某大型银行DDoS防护</h3>
+                    <p>面对频繁的DDoS攻击，我们提供了10T级别的防护能力，成功抵御了多次大规模攻击，保障了网银系统的稳定运行，提升了客户满意度。</p>
+                </div>
+            </div>
+            
+            <div class="case-card">
+                <div class="case-image" style="background-image: url('https://placekitten.com/601/300');"></div>
+                <div class="case-content">
+                    <span class="case-industry">电子商务</span>
+                    <h3>大型电商平台安全防护</h3>
+                    <p>为大型电商提供了全方位的安全防护，从网络层到应用层，特别是在高峰期防御了大量恶意抢购和刷单行为，确保了平台的正常运营。</p>
+                </div>
+            </div>
+            
+            <div class="case-card">
+                <div class="case-image" style="background-image: url('https://placekitten.com/602/300');"></div>
+                <div class="case-content">
+                    <span class="case-industry">政府机构</span>
+                    <h3>政府网站安全与合规</h3>
+                    <p>帮助政府部门升级网站安全防护体系，符合等级保护要求，防御各类攻击，保护敏感数据安全，成功通过了等保三级认证。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section faq-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>常见问题</h2>
+            <p>关于网络安全服务，您可能关心的问题</p>
+        </div>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>如何选择适合我的安全防护方案？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>选择安全防护方案应考虑以下因素：1) 业务类型和规模；2) 面临的主要威胁；3) 合规性要求；4) 预算限制。建议您先进行安全评估，明确需求和风险点，然后根据评估结果选择适合的安全产品和服务。我们的安全专家可以为您提供专业的咨询和建议，帮助您制定最适合的安全防护方案。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>DDoS防护如何计费？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>DDoS防护的计费方式有两种：1) 基础防护：提供一定防护能力，通常免费或按月低价收费；2) 高级防护：按照防护带宽峰值计费，分为包年包月和按量计费两种模式。针对不同业务需求，我们提供灵活的计费方案，既能满足基本安全需求，又能应对突发大流量攻击。您可以根据业务规模和预算选择合适的计费方式。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>遭受攻击时如何快速响应？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>当您遭受攻击时，我们的安全响应流程如下：1) 立即联系我们的7*24小时安全应急响应团队；2) 我们会迅速评估攻击类型和规模；3) 根据攻击特点，启动相应的防护策略，如流量清洗、封禁恶意IP等；4) 持续监控攻击情况，动态调整防护策略；5) 攻击结束后，提供详细的攻击分析报告和优化建议。我们建议客户平时就做好应急预案，确保在遭受攻击时能快速响应。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>如何保证数据安全合规？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>确保数据安全合规需要多方面措施：1) 数据分类分级：识别敏感数据，并进行合理分类；2) 访问控制：实施最小权限原则，确保只有授权用户才能访问数据；3) 数据加密：对敏感数据进行传输和存储加密；4) 数据脱敏：在开发测试或数据分析时对敏感信息进行脱敏处理；5) 数据备份：定期备份重要数据，防止数据丢失；6) 合规管理：了解并遵守相关法规要求，如GDPR、等级保护等。我们的数据安全解决方案可以帮助您实施这些措施。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>安全服务有哪些售后保障？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>我们提供全面的售后保障：1) 7*24小时技术支持：随时解答您的问题和疑虑；2) 安全事件响应：快速响应并处理安全事件；3) 定期安全报告：提供详细的安全分析和建议；4) 安全培训：为您的团队提供安全意识和技能培训；5) SLA保障：根据您购买的服务级别，提供相应的服务质量保障；6) 持续优化：根据安全态势和业务需求，不断优化安全防护策略。我们致力于为客户提供最优质的安全服务体验。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>开始构建您的安全防护体系</h2>
+            <p>联系我们的安全专家，根据您的业务需求和风险情况，定制专属安全解决方案</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary">安全评估</a>
+                <a href="#" class="btn-outline light">联系专家</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>产品服务</h4>
+                <a href="/products/cvm">云服务器</a>
+                <a href="/products/security">云安全</a>
+                <a href="/products/cos">云存储</a>
+                <a href="/products/eip">网络服务</a>
+            </div>
+            <div class="footer-col">
+                <h4>解决方案</h4>
+                <a href="/solutions/finance">金融</a>
+                <a href="/solutions/education">教育</a>
+            </div>
+            <div class="footer-col">
+                <h4>开发者资源</h4>
+                <a href="/developer/api">API文档</a>
+                <a href="/developer/sdk">SDK</a>
+                <a href="/developer">工具</a>
+            </div>
+            <div class="footer-col">
+                <h4>关于我们</h4>
+                <a href="/about">公司介绍</a>
+                <a href="/contact">联系我们</a>
+                <a href="/partners">合作伙伴</a>
+                <a href="/terms">服务条款</a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <h4>友情链接</h4>
+            <div class="links-grid">
+                <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                <a href="/partners">查看全部合作伙伴</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 简易云服务。保留所有权利。</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // FAQ展开收起
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function() {
+            const faqItem = this.parentNode;
+            faqItem.classList.toggle('active');
+        });
+    });
+</script>
+</body>
+</html> 
