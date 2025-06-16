@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云服务器 CVM - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #2568ef, #3f89f8);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .hero-text h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .hero-text p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 16px;
+            color: var(--medium-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card p {
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .pricing-section {
+            background: #f5f7fa;
+        }
+        
+        .pricing-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .pricing-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+            font-weight: 500;
+        }
+        
+        .pricing-tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .pricing-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-header {
+            background: linear-gradient(135deg, #2568ef, #3f89f8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .pricing-header h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-price {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .pricing-price span {
+            font-size: 16px;
+            font-weight: normal;
+        }
+        
+        .pricing-body {
+            padding: 30px;
+        }
+        
+        .pricing-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .pricing-feature i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .pricing-button {
+            display: block;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .pricing-button:hover {
+            background: var(--secondary-color);
+        }
+        
+        .scenarios-section {
+            background: #fff;
+        }
+        
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .scenario-card {
+            background: #f7f9fc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .scenario-image {
+            height: 160px;
+            background-color: #e9ecef;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .scenario-content {
+            padding: 20px;
+        }
+        
+        .scenario-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .scenario-content p {
+            font-size: 14px;
+            color: var(--medium-text);
+            margin-bottom: 15px;
+        }
+        
+        .faq-section {
+            background: #f5f7fa;
+        }
+        
+        .faq-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 18px;
+        }
+        
+        .faq-answer {
+            padding-top: 15px;
+            border-top: 1px solid #eaeaea;
+            margin-top: 15px;
+            display: none;
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #2568ef, #3f89f8);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .cta-content h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-content p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .specs-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        
+        .specs-section th {
+            background: #f5f7fa;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+            border: 1px solid #eaeaea;
+        }
+        
+        .specs-section td {
+            padding: 15px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .specs-section tr:hover {
+            background: #f9fafc;
+        }
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo-container">
+            <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+            <h1>简易云服务</h1>
+        </div>
+        <nav>
+            <a href="/">首页</a>
+            <a href="/activities">活动中心</a>
+            <a href="/products" class="active">产品</a>
+            <a href="/solutions">解决方案</a>
+            <a href="/pricing">定价</a>
+            <a href="/enterprise">企业中心</a>
+            <a href="/developer">开发者</a>
+
+            <div class="user-actions">
+                <!-- 未登录状态 -->
+                <div th:if="${user == null}">
+                    <a href="/login" class="btn-login">登录</a>
+                    <a href="/register" class="btn-register">注册</a>
+                </div>
+                <!-- 已登录状态 -->
+                <div th:if="${user != null}" class="logged-in-user">
+                    <span th:text="${'欢迎, ' + user.username}"></span>
+                    <a href="/logout" class="btn-logout">退出登录</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>云服务器 CVM</h1>
+                <p>稳定、安全、弹性、高性能的云端计算服务，实时满足您的多样性业务需求，为您的应用提供最可靠的基础设施支持。</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn-primary">立即购买</a>
+                    <a href="#" class="btn-outline light">免费试用</a>
+                </div>
+            </div>
+            <div class="hero-image">
+<!--                <img th:src="@{/img/server-illustration.png}" alt="云服务器插图" src="https://placekitten.com/600/400">-->
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>产品优势</h2>
+            <p>简易云服务器具备卓越的性能、灵活的配置方案和多重安全保障，是您业务上云的首选</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-lightning"></i></div>
+                <h3>高性能计算</h3>
+                <p>采用最新一代处理器，提供超高计算性能，满足您对计算能力的需求，支持多种应用场景。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                <h3>安全可靠</h3>
+                <p>多重安全防护机制，全面防御DDoS攻击，保障您的业务安全稳定运行，无后顾之忧。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div>
+                <h3>弹性伸缩</h3>
+                <p>根据业务需求灵活调整资源配置，支持秒级扩容，轻松应对业务高峰期的流量激增。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-speedometer"></i></div>
+                <h3>低延迟网络</h3>
+                <p>高速网络互联，极低的访问延迟，为您提供流畅的网络体验和稳定的服务质量。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-clock-history"></i></div>
+                <h3>数据持久性</h3>
+                <p>多副本数据存储和定期自动备份，确保数据的可靠性和持久性，有效防止数据丢失。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-puzzle"></i></div>
+                <h3>丰富的镜像</h3>
+                <p>提供多种操作系统镜像和应用镜像，满足不同场景需求，快速部署您的应用环境。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section specs-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>产品规格</h2>
+            <p>根据您的业务需求，选择最适合的云服务器配置</p>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>实例规格</th>
+                    <th>vCPU</th>
+                    <th>内存</th>
+                    <th>存储</th>
+                    <th>网络带宽</th>
+                    <th>适用场景</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>基础型 S1</td>
+                    <td>1核</td>
+                    <td>2GB</td>
+                    <td>50GB SSD</td>
+                    <td>1Mbps</td>
+                    <td>个人网站、小型Web应用</td>
+                </tr>
+                <tr>
+                    <td>标准型 S2</td>
+                    <td>2核</td>
+                    <td>4GB</td>
+                    <td>100GB SSD</td>
+                    <td>3Mbps</td>
+                    <td>中小型网站、应用服务器</td>
+                </tr>
+                <tr>
+                    <td>企业型 S3</td>
+                    <td>4核</td>
+                    <td>8GB</td>
+                    <td>200GB SSD</td>
+                    <td>5Mbps</td>
+                    <td>企业应用、中型数据库</td>
+                </tr>
+                <tr>
+                    <td>高性能型 S4</td>
+                    <td>8核</td>
+                    <td>16GB</td>
+                    <td>500GB SSD</td>
+                    <td>10Mbps</td>
+                    <td>高流量网站、大型应用</td>
+                </tr>
+                <tr>
+                    <td>内存优化型 M1</td>
+                    <td>4核</td>
+                    <td>16GB</td>
+                    <td>200GB SSD</td>
+                    <td>5Mbps</td>
+                    <td>内存密集型应用、缓存服务</td>
+                </tr>
+                <tr>
+                    <td>计算优化型 C1</td>
+                    <td>8核</td>
+                    <td>8GB</td>
+                    <td>200GB SSD</td>
+                    <td>5Mbps</td>
+                    <td>高性能计算、批处理任务</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="section pricing-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>产品定价</h2>
+            <p>透明的定价体系，灵活的付费模式，为您提供高性价比的云服务器产品</p>
+        </div>
+        
+        <div class="pricing-tabs">
+            <div class="pricing-tab active" data-target="monthly">包年包月</div>
+            <div class="pricing-tab" data-target="ondemand">按需付费</div>
+        </div>
+        
+        <div class="pricing-cards">
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <h3>入门型</h3>
+                    <div class="pricing-price">¥68<span>/月</span></div>
+                </div>
+                <div class="pricing-body">
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>1核 CPU</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>2GB 内存</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>50GB SSD云硬盘</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>1Mbps 带宽</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>流量包 500GB/月</span>
+                    </div>
+                    <a href="#" class="pricing-button">立即购买</a>
+                </div>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <h3>标准型</h3>
+                    <div class="pricing-price">¥138<span>/月</span></div>
+                </div>
+                <div class="pricing-body">
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>2核 CPU</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>4GB 内存</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>100GB SSD云硬盘</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>3Mbps 带宽</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>流量包 1TB/月</span>
+                    </div>
+                    <a href="#" class="pricing-button">立即购买</a>
+                </div>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <h3>企业型</h3>
+                    <div class="pricing-price">¥298<span>/月</span></div>
+                </div>
+                <div class="pricing-body">
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>4核 CPU</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>8GB 内存</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>200GB SSD云硬盘</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>5Mbps 带宽</span>
+                    </div>
+                    <div class="pricing-feature">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>流量包 2TB/月</span>
+                    </div>
+                    <a href="#" class="pricing-button">立即购买</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section scenarios-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>应用场景</h2>
+            <p>云服务器广泛应用于各种业务场景，满足不同领域的计算需求</p>
+        </div>
+        
+        <div class="scenario-cards">
+            <div class="scenario-card">
+                <div class="scenario-image" style="background-image: url('https://placekitten.com/600/300');"></div>
+                <div class="scenario-content">
+                    <h3>Web应用托管</h3>
+                    <p>部署各类网站、电商平台、内容管理系统，确保高可用性和快速访问。</p>
+                </div>
+            </div>
+            
+            <div class="scenario-card">
+                <div class="scenario-image" style="background-image: url('https://placekitten.com/601/300');"></div>
+                <div class="scenario-content">
+                    <h3>开发测试环境</h3>
+                    <p>快速搭建开发、测试、预发布环境，加速应用迭代和上线进程。</p>
+                </div>
+            </div>
+            
+            <div class="scenario-card">
+                <div class="scenario-image" style="background-image: url('https://placekitten.com/602/300');"></div>
+                <div class="scenario-content">
+                    <h3>企业应用部署</h3>
+                    <p>部署ERP、CRM、OA等企业核心系统，提供稳定可靠的运行环境。</p>
+                </div>
+            </div>
+            
+            <div class="scenario-card">
+                <div class="scenario-image" style="background-image: url('https://placekitten.com/603/300');"></div>
+                <div class="scenario-content">
+                    <h3>大数据分析</h3>
+                    <p>处理和分析海量数据，挖掘数据价值，支撑企业决策。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section faq-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>常见问题</h2>
+            <p>关于云服务器的使用和管理，您可能关心的问题</p>
+        </div>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>什么是云服务器？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>云服务器是在云计算基础设施上提供的虚拟化计算资源，用户通过互联网可以随时随地访问和管理。它具备传统物理服务器的所有功能，同时拥有云计算的弹性扩展、高可用性、按需付费等优势。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>如何选择适合我的云服务器配置？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>选择云服务器配置需要考虑您的业务类型、访问量、数据处理量等因素。一般来说，CPU密集型应用需要更多的处理器核心，内存密集型应用需要更大的内存，而I/O密集型应用则需要更高性能的硬盘和网络带宽。您可以根据实际需求选择相应的配置。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>云服务器支持哪些操作系统？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>我们的云服务器支持多种主流操作系统，包括但不限于Windows Server、CentOS、Ubuntu、Debian等。您可以根据自己的需求选择适合的操作系统。同时，我们也提供自定义镜像功能，您可以上传自己的系统镜像。</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>如何保证云服务器的安全性？</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>我们提供多层次的安全保障，包括但不限于：网络安全组、DDoS防护、Web应用防火墙、SSL证书等。同时，我们建议用户加强账号安全管理、定期更新系统补丁、设置复杂密码等，共同维护云服务器的安全。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>开始使用云服务器</h2>
+            <p>快速部署您的业务应用，享受稳定可靠的云计算服务</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary">立即购买</a>
+                <a href="#" class="btn-outline light">免费试用</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>产品服务</h4>
+                <a href="/products/cvm">云服务器</a>
+                <a href="/products/security">云安全</a>
+                <a href="/products/cos">云存储</a>
+                <a href="/products/eip">网络服务</a>
+            </div>
+            <div class="footer-col">
+                <h4>解决方案</h4>
+                <a href="/solutions/finance">金融</a>
+                <a href="/solutions/education">教育</a>
+            </div>
+            <div class="footer-col">
+                <h4>开发者资源</h4>
+                <a href="/developer/api">API文档</a>
+                <a href="/developer/sdk">SDK</a>
+                <a href="/developer">工具</a>
+            </div>
+            <div class="footer-col">
+                <h4>关于我们</h4>
+                <a href="/about">公司介绍</a>
+                <a href="/contact">联系我们</a>
+                <a href="/partners">合作伙伴</a>
+                <a href="/terms">服务条款</a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <h4>友情链接</h4>
+            <div class="links-grid">
+                <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                <a href="/partners">查看全部合作伙伴</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 简易云服务。保留所有权利。</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // FAQ展开收起
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function() {
+            const faqItem = this.parentNode;
+            faqItem.classList.toggle('active');
+        });
+    });
+    
+    // 定价选项卡切换
+    document.querySelectorAll('.pricing-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.pricing-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            this.classList.add('active');
+            // 这里可以添加不同计费模式的切换逻辑
+        });
+    });
+</script>
+</body>
+</html> 

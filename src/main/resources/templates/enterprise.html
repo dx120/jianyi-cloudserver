@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业专区 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .enterprise-banner {
+            background: linear-gradient(135deg, #2F54EB 0%, #1890FF 100%);
+            padding: 80px 0;
+            color: #fff;
+        }
+        
+        .enterprise-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .enterprise-banner-text {
+            flex: 1;
+        }
+        
+        .enterprise-banner h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .enterprise-banner p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+        
+        .enterprise-banner-image {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .enterprise-banner-image img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .solutions-section {
+            padding: 80px 0;
+            background-color: var(--light-bg);
+        }
+        
+        .solution-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .solution-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+        
+        .solution-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .solution-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(47, 84, 235, 0.1);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2F54EB;
+            font-size: 24px;
+        }
+        
+        .solution-item h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .solution-item p {
+            color: var(--medium-text);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-section {
+            padding: 80px 0;
+        }
+        
+        .pricing-table {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .pricing-plan {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            width: 300px;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .pricing-plan.featured {
+            border: 2px solid #2F54EB;
+            transform: scale(1.05);
+        }
+        
+        .pricing-plan.featured .plan-tag {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2F54EB;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .plan-name {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .plan-price {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .price-amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2F54EB;
+        }
+        
+        .price-period {
+            font-size: 14px;
+            color: var(--light-text);
+        }
+        
+        .plan-features {
+            margin-bottom: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .feature-icon {
+            color: #52C41A;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        .plan-button {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: #2F54EB;
+            color: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .plan-button:hover {
+            background: #1D39C4;
+        }
+        
+        .case-section {
+            padding: 80px 0;
+            background-color: var(--light-bg);
+            text-align: center;
+        }
+        
+        .case-logos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .case-logo {
+            width: 120px;
+            height: 80px;
+            background: #fff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .case-logo img {
+            max-width: 80%;
+            max-height: 60%;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: filter 0.3s, opacity 0.3s;
+        }
+        
+        .case-logo:hover img {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        
+        .contact-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .contact-box {
+            max-width: 800px;
+            margin: 40px auto 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            padding: 40px;
+        }
+        
+        .contact-form {
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            border-color: #2F54EB;
+            outline: none;
+        }
+        
+        .form-submit {
+            margin-top: 10px;
+            background: #2F54EB;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .form-submit:hover {
+            background: #1D39C4;
+        }
+        
+        @media (max-width: 992px) {
+            .enterprise-banner-content {
+                flex-direction: column;
+            }
+            
+            .enterprise-banner-image {
+                order: -1;
+                margin-bottom: 30px;
+            }
+            
+            .pricing-plan.featured {
+                transform: none;
+            }
+        }
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo-container">
+            <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+            <h1>简易云服务</h1>
+        </div>
+        <nav>
+            <a href="/">首页</a>
+            <a href="/activities">活动中心</a>
+            <a href="/products" >产品</a>
+            <a href="/solutions">解决方案</a>
+            <a href="/pricing">定价</a>
+            <a href="/enterprise"class="active">企业中心</a>
+            <a href="/developer">开发者</a>
+
+            <div class="user-actions">
+                <!-- 未登录状态 -->
+                <div th:if="${user == null}">
+                    <a href="/login" class="btn-login">登录</a>
+                    <a href="/register" class="btn-register">注册</a>
+                </div>
+                <!-- 已登录状态 -->
+                <div th:if="${user != null}" class="logged-in-user">
+                    <span th:text="${'欢迎, ' + user.username}"></span>
+                    <a href="/logout" class="btn-logout">退出登录</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="enterprise-banner">
+    <div class="container">
+        <div class="enterprise-banner-content">
+            <div class="enterprise-banner-text">
+                <h2>企业专区</h2>
+                <p>为企业用户提供专属海量优惠福利，助力中小企业数字化转型升级，定制化解决方案帮助企业降本增效。</p>
+                <a href="#contact" class="btn-primary">获取企业方案</a>
+            </div>
+            <div class="enterprise-banner-image">
+<!--                <img src="https://placekitten.com/600/400" alt="企业上云">-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <section class="solutions-section">
+        <div class="container">
+            <h2 class="section-title">企业解决方案</h2>
+            <p class="text-center" style="max-width: 700px; margin: 0 auto 40px; color: var(--medium-text);">
+                基于多年行业经验和技术积累，为不同规模企业提供全方位的云服务解决方案，赋能企业数字化转型
+            </p>
+            
+            <div class="solution-box">
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <i class="bi bi-shop"></i>
+                    </div>
+                    <h3>跨境电商场景解决方案</h3>
+                    <p>构建从IaaS、PaaS到SaaS的一站式方案，全方位赋能行业服务商、自运营商家轻松出海</p>
+                    <a href="#" class="btn-outline">了解详情</a>
+                </div>
+                
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <i class="bi bi-globe"></i>
+                    </div>
+                    <h3>CDN&音视频通信出海</h3>
+                    <p>提供游戏出海、社交娱乐等热门场景解决方案，助力中国企业快速抢占出海市场</p>
+                    <a href="#" class="btn-outline">了解详情</a>
+                </div>
+                
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <i class="bi bi-megaphone"></i>
+                    </div>
+                    <h3>企业营销推广方案</h3>
+                    <p>帮助企业进行客户全生命周期运营，为企业提供多渠道营销模式，高效提供与客户的沟通互动</p>
+                    <a href="#" class="btn-outline">了解详情</a>
+                </div>
+                
+                <div class="solution-item">
+                    <div class="solution-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h3>智慧零售行业安全方案</h3>
+                    <p>帮助智慧零售客户一站式解决各类黑产对抗安全问题，为您打造全面的安全防护系统</p>
+                    <a href="#" class="btn-outline">了解详情</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="pricing-section">
+        <div class="container">
+            <h2 class="section-title">企业专享套餐</h2>
+            <p class="text-center" style="max-width: 700px; margin: 0 auto 40px; color: var(--medium-text);">
+                针对企业需求量身定制的产品套餐，提供灵活的价格方案和丰富的资源配置
+            </p>
+            
+            <div class="pricing-table">
+                <div class="pricing-plan">
+                    <h3 class="plan-name">创业版</h3>
+                    <div class="plan-price">
+                        <span class="price-amount">¥1299</span>
+                        <span class="price-period">/月</span>
+                    </div>
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>2台云服务器（2核4G）</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>100GB云存储空间</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>1个MySQL数据库（入门版）</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>5Mbps带宽</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>标准技术支持</span>
+                        </div>
+                    </div>
+                    <a href="#" class="plan-button">立即选购</a>
+                </div>
+                
+                <div class="pricing-plan featured">
+                    <span class="plan-tag">最受欢迎</span>
+                    <h3 class="plan-name">成长版</h3>
+                    <div class="plan-price">
+                        <span class="price-amount">¥3699</span>
+                        <span class="price-period">/月</span>
+                    </div>
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>5台云服务器（4核8G）</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>500GB云存储空间</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>3个MySQL数据库（标准版）</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>20Mbps带宽</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>7×24小时技术支持</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>负载均衡服务</span>
+                        </div>
+                    </div>
+                    <a href="#" class="plan-button">立即选购</a>
+                </div>
+                
+                <div class="pricing-plan">
+                    <h3 class="plan-name">企业版</h3>
+                    <div class="plan-price">
+                        <span class="price-amount">¥8999</span>
+                        <span class="price-period">/月</span>
+                    </div>
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>10台云服务器（8核16G）</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>2TB云存储空间</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>5个MySQL数据库（企业版）</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>100Mbps带宽</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>专属技术支持团队</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill feature-icon"></i>
+                            <span>全套企业级服务</span>
+                        </div>
+                    </div>
+                    <a href="#" class="plan-button">立即选购</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="case-section">
+        <div class="container">
+            <h2 class="section-title">成功案例</h2>
+            <p style="max-width: 700px; margin: 0 auto 40px; color: var(--medium-text);">
+                众多知名企业信赖我们的云服务解决方案，助力其业务快速发展与数字化转型
+            </p>
+            
+            <div class="case-logos">
+                <div class="case-logo">
+                    <img src="https://via.placeholder.com/150x50?text=公司1" alt="客户案例">
+                </div>
+                <div class="case-logo">
+                    <img src="https://via.placeholder.com/150x50?text=公司2" alt="客户案例">
+                </div>
+                <div class="case-logo">
+                    <img src="https://via.placeholder.com/150x50?text=公司3" alt="客户案例">
+                </div>
+                <div class="case-logo">
+                    <img src="https://via.placeholder.com/150x50?text=公司4" alt="客户案例">
+                </div>
+                <div class="case-logo">
+                    <img src="https://via.placeholder.com/150x50?text=公司5" alt="客户案例">
+                </div>
+                <div class="case-logo">
+                    <img src="https://via.placeholder.com/150x50?text=公司6" alt="客户案例">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">企业咨询</h2>
+            <p style="max-width: 700px; margin: 0 auto 40px; color: var(--medium-text);">
+                填写以下表单，获取专属企业解决方案与优惠报价，我们的专业顾问将尽快与您联系
+            </p>
+            
+            <div class="contact-box">
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label class="form-label" for="company">公司名称</label>
+                        <input type="text" id="company" name="company" class="form-input" placeholder="请输入您的公司名称">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="name">联系人</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="请输入您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="phone">联系电话</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="请输入您的联系电话">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="email">电子邮箱</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="请输入您的电子邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="needs">业务需求</label>
+                        <textarea id="needs" name="needs" class="form-input" rows="4" placeholder="请简要描述您的业务需求"></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">提交咨询</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>产品服务</h4>
+                <a href="/products/cvm">云服务器</a>
+                <a href="/products/security">云安全</a>
+                <a href="/products/cos">云存储</a>
+                <a href="/products/eip">网络服务</a>
+            </div>
+            <div class="footer-col">
+                <h4>解决方案</h4>
+                <a href="/solutions/finance">金融</a>
+                <a href="/solutions/education">教育</a>
+            </div>
+            <div class="footer-col">
+                <h4>开发者资源</h4>
+                <a href="/developer/api">API文档</a>
+                <a href="/developer/sdk">SDK</a>
+                <a href="/developer">工具</a>
+            </div>
+            <div class="footer-col">
+                <h4>关于我们</h4>
+                <a href="/about">公司介绍</a>
+                <a href="/contact">联系我们</a>
+                <a href="/partners">合作伙伴</a>
+                <a href="/terms">服务条款</a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <h4>友情链接</h4>
+            <div class="links-grid">
+                <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                <a href="/partners">查看全部合作伙伴</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 简易云服务。保留所有权利。</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html> 

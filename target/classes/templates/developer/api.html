@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 中心 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .api-banner {
+            background: linear-gradient(to right, #0052CC, #1976d2);
+            color: white;
+            padding: 60px 0;
+        }
+        
+        .api-banner h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .api-banner p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .search-box {
+            background-color: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 40px auto 0;
+            max-width: 600px;
+        }
+        
+        .search-box input {
+            border: none;
+            padding: 10px;
+            flex-grow: 1;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-box button {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .search-box button:hover {
+            background: var(--secondary-color);
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 28px;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--medium-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .category-tab {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--medium-text);
+            font-weight: 500;
+        }
+        
+        .category-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .api-table thead th {
+            background-color: #f5f7fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        .api-table tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .api-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .api-table tbody td {
+            padding: 15px;
+            color: var(--medium-text);
+        }
+        
+        .api-table tbody tr:hover {
+            background-color: #f9fafc;
+        }
+        
+        .api-table .api-name {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .api-table .api-link {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .api-table .api-link:hover {
+            text-decoration: underline;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #e3f2fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .feature-card p {
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .debug-section {
+            background: linear-gradient(to right, #f0f4f8, #e6f0ff);
+        }
+        
+        .debug-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        @media (max-width: 992px) {
+            .debug-container {
+                flex-direction: column;
+            }
+        }
+        
+        .debug-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .debug-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .debug-content {
+            flex: 1;
+        }
+        
+        .debug-content h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--dark-text);
+        }
+        
+        .debug-content p {
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .debug-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+        
+        .debug-content li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .debug-content li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 18px;
+            margin-top: 2px;
+        }
+        
+        .resources-section {
+            background-color: white;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .resource-card {
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: transparent;
+        }
+        
+        .resource-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .resource-card p {
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .resource-card a {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .resource-card a i {
+            margin-left: 5px;
+        }
+        
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+                <h1>简易云服务</h1>
+            </div>
+            <nav>
+                <a href="/">首页</a>
+                <a href="/activities">活动中心</a>
+                <a href="/products">产品</a>
+                <a href="/solutions">解决方案</a>
+                <a href="/pricing">定价</a>
+                <a href="/enterprise">企业中心</a>
+                <a href="/developer">开发者</a>
+
+                <div class="user-actions">
+                    <!-- 未登录状态 -->
+                    <div th:if="${user == null}">
+                        <a href="/login" class="btn-login">登录</a>
+                        <a href="/register" class="btn-register">注册</a>
+                    </div>
+                    <!-- 已登录状态 -->
+                    <div th:if="${user != null}" class="logged-in-user">
+                        <span th:text="${'欢迎, ' + user.username}"></span>
+                        <a href="/logout" class="btn-logout">退出登录</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="api-banner">
+        <div class="container">
+            <h1>简易云 API 平台</h1>
+            <p>提供强大的API调用能力，让您轻松集成管理云服务资源</p>
+            
+            <div class="search-box">
+                <input type="text" placeholder="搜索产品名称或API名称">
+                <button>查询</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>热门产品 API 文档/错误码</h2>
+                    <p>查找并使用我们的 API 快速构建您的应用</p>
+                </div>
+                
+                <div class="category-tabs">
+                    <div class="category-tab active">计算</div>
+                    <div class="category-tab">存储</div>
+                    <div class="category-tab">数据库</div>
+                    <div class="category-tab">网络</div>
+                    <div class="category-tab">安全</div>
+                    <div class="category-tab">容器</div>
+                    <div class="category-tab">Serverless</div>
+                </div>
+                
+                <table class="api-table">
+                    <thead>
+                        <tr>
+                            <th>产品名称</th>
+                            <th>产品描述</th>
+                            <th>API 文档</th>
+                            <th>错误码</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="api-name">云服务器</td>
+                            <td>介绍如何使用API对云服务器进行操作，包括使用并管理实例、镜像、密钥等资源。</td>
+                            <td><a href="#" class="api-link">API 文档</a></td>
+                            <td><a href="#" class="api-link">错误码</a></td>
+                        </tr>
+                        <tr>
+                            <td class="api-name">对象存储</td>
+                            <td>安全稳定、海量、便捷、低延迟、低成本的云端存储服务。</td>
+                            <td><a href="#" class="api-link">API 文档</a></td>
+                            <td><a href="#" class="api-link">错误码</a></td>
+                        </tr>
+                        <tr>
+                            <td class="api-name">云硬盘</td>
+                            <td>介绍如何使用API对云硬盘和快照进行相关操作，如创建弹性云盘、创建快照或回滚快照等。</td>
+                            <td><a href="#" class="api-link">API 文档</a></td>
+                            <td><a href="#" class="api-link">错误码</a></td>
+                        </tr>
+                        <tr>
+                            <td class="api-name">云数据库 MySQL</td>
+                            <td>介绍如何使用API对云数据库MySQL进行操作，包括查询数据库表、查询云数据库实例任务列表、续费云数据库实例等。</td>
+                            <td><a href="#" class="api-link">API 文档</a></td>
+                            <td><a href="#" class="api-link">错误码</a></td>
+                        </tr>
+                        <tr>
+                            <td class="api-name">内容分发网络 CDN</td>
+                            <td>介绍如何使用API对内容分发网络操作，包括域名管理、配置管理、日志查询等。</td>
+                            <td><a href="#" class="api-link">API 文档</a></td>
+                            <td><a href="#" class="api-link">错误码</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="#" class="btn-outline">查看所有产品</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section debug-section">
+            <div class="container">
+                <div class="debug-container">
+                    <div class="debug-image">
+                        <img src="https://img.alicdn.com/tfs/TB1_YvwXG67gK0jSZFHXXa9jVXa-1180-600.png" alt="API在线调试中心">
+                    </div>
+                    <div class="debug-content">
+                        <h2>API 在线调试中心</h2>
+                        <p>强大的在线检索调试工具，轻松调试您的代码。API在线调试中心为您提供了便捷的API调试体验，无需搭建环境即可快速测试API功能。</p>
+                        
+                        <ul>
+                            <li><i class="bi bi-search"></i> <span>内容检索：云产品及 API 在线查询和检索</span></li>
+                            <li><i class="bi bi-terminal"></i> <span>在线调试：可见即可用的API在线接口调试功能</span></li>
+                            <li><i class="bi bi-code-square"></i> <span>同步生成：同步生成对应SDK Demo代码</span></li>
+                        </ul>
+                        
+                        <a href="#" class="btn-primary">开始使用</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>API 中心特性</h2>
+                    <p>简单易用的 API 让开发更高效</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3>安全可靠</h3>
+                        <p>基于签名密钥的安全认证机制，确保API调用的安全性，支持多种安全协议和加密方式，保障数据传输安全。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-lightning"></i>
+                        </div>
+                        <h3>高效便捷</h3>
+                        <p>标准化的接口设计，统一的调用方式，规范的错误码和返回格式，让API调用更加简单高效。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-globe"></i>
+                        </div>
+                        <h3>全球覆盖</h3>
+                        <p>全球多地域部署，支持就近接入，降低延迟，提升API调用速度和稳定性。</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+                        <h3>完善工具</h3>
+                        <p>提供在线调试工具、SDK开发工具包、示例代码等，简化开发流程，提高开发效率。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section resources-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>开发者资源</h2>
+                    <p>为API开发提供全面支持</p>
+                </div>
+                
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>API 3.0 概览</h3>
+                        <p>了解简易云 API 3.0 的特性、使用方法和注意事项，快速掌握API的基本使用。</p>
+                        <a href="#">查看详情 <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>SDK 中心</h3>
+                        <p>提供多种编程语言的SDK开发工具包，包括Java、Python、PHP、Node.js等，帮助开发者快速集成云服务。</p>
+                        <a href="/developer/sdk">前往SDK中心 <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>开发指南</h3>
+                        <p>提供详细的API开发指南，包括认证方式、请求结构、响应结构、错误码等内容，助您快速上手API开发。</p>
+                        <a href="#">查看开发指南 <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>产品服务</h4>
+                    <a href="/products/cvm">云服务器</a>
+                    <a href="/products/security">云安全</a>
+                    <a href="/products/cos">云存储</a>
+                    <a href="/products/eip">网络服务</a>
+                </div>
+                <div class="footer-col">
+                    <h4>解决方案</h4>
+                    <a href="/solutions/finance">金融</a>
+                    <a href="/solutions/education">教育</a>
+                </div>
+                <div class="footer-col">
+                    <h4>开发者资源</h4>
+                    <a href="/developer/api">API文档</a>
+                    <a href="/developer/sdk">SDK</a>
+                    <a href="/developer">工具</a>
+                </div>
+                <div class="footer-col">
+                    <h4>关于我们</h4>
+                    <a href="/about">公司介绍</a>
+                    <a href="/contact">联系我们</a>
+                    <a href="/partners">合作伙伴</a>
+                    <a href="/terms">服务条款</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>友情链接</h4>
+                <div class="links-grid">
+                    <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                    <a href="/partners">查看全部合作伙伴</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 简易云服务。保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 简单的选项卡切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.category-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有活动状态
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                    
+                    // 这里可以添加实际的内容切换逻辑
+                    // 例如显示不同分类的API列表
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教育解决方案 - 简易云服务</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <style>
+        .solution-banner {
+            background: linear-gradient(to right, #8E44AD, #9B59B6);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .solution-banner h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .solution-banner p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .solution-intro {
+            padding: 70px 0;
+            background-color: #f8f9fa;
+        }
+
+        .intro-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro-text h2 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .intro-text p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            color: var(--medium-text);
+        }
+
+        .intro-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .intro-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .scenarios-section {
+            padding: 70px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--medium-text);
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .scenario-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .scenario-image {
+            height: 180px;
+            background-color: #e0e0e0;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scenario-image i {
+            font-size: 64px;
+            color: #8E44AD;
+        }
+
+        .scenario-content {
+            padding: 25px;
+        }
+
+        .scenario-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .scenario-content p {
+            color: var(--medium-text);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .features-section {
+            padding: 70px 0;
+            background-color: #f8f9fa;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            align-items: center;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 20px;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            background-color: #f0e6f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon i {
+            font-size: 28px;
+            color: #8E44AD;
+        }
+
+        .feature-content h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--dark-text);
+        }
+
+        .feature-content p {
+            font-size: 15px;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+
+        .features-image {
+            text-align: center;
+        }
+
+        .features-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .case-studies {
+            padding: 70px 0;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .case-image {
+            height: 200px;
+            background-color: #e0e0e0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .case-content {
+            padding: 25px;
+        }
+
+        .case-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .case-content p {
+            color: var(--medium-text);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .case-link {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .case-link:hover {
+            text-decoration: underline;
+        }
+
+        .cta-section {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(to right, #f0e6f6, #f5eeff);
+        }
+
+        .cta-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--dark-text);
+        }
+
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--medium-text);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            padding: 12px 25px;
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f5f5f5;
+        }
+
+        @media (max-width: 992px) {
+            .intro-content, .features-container {
+                flex-direction: column;
+                grid-template-columns: 1fr;
+            }
+
+            .features-image {
+                order: 1;
+            }
+
+            .features-list {
+                order: 2;
+            }
+        }
+
+        /* 已登录用户样式 */
+        .logged-in-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logged-in-user span {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        /*友链*/
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .links-grid a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .links-grid a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img th:src="@{/logo.jpg}" alt="CloudServe Logo">
+                <h1>简易云服务</h1>
+            </div>
+            <nav>
+                <a href="/">首页</a>
+                <a href="/activities">活动中心</a>
+                <a href="/products" >产品</a>
+                <a href="/solutions"class="active">解决方案</a>
+                <a href="/pricing">定价</a>
+                <a href="/enterprise">企业中心</a>
+                <a href="/developer">开发者</a>
+
+                <div class="user-actions">
+                    <!-- 未登录状态 -->
+                    <div th:if="${user == null}">
+                        <a href="/login" class="btn-login">登录</a>
+                        <a href="/register" class="btn-register">注册</a>
+                    </div>
+                    <!-- 已登录状态 -->
+                    <div th:if="${user != null}" class="logged-in-user">
+                        <span th:text="${'欢迎, ' + user.username}"></span>
+                        <a href="/logout" class="btn-logout">退出登录</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="solution-banner">
+        <div class="container">
+            <h1>教育解决方案</h1>
+            <p>为教育机构提供稳定、高效的云计算基础设施和智能教学工具，助力教育信息化建设与创新</p>
+            <div class="banner-buttons">
+                <a href="/free-trial" class="btn-primary">申请免费试用</a>
+                <a href="/contact" class="btn-secondary">联系销售</a>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="solution-intro">
+            <div class="container">
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <h2>教育云解决方案概览</h2>
+                        <p>简易云服务教育解决方案为各类教育机构提供一站式云服务，基于安全、可靠的云计算基础设施，结合教育行业特点，打造适应教育信息化需求的系统平台和应用工具。</p>
+                        <p>我们的解决方案覆盖K12学校、高等教育、职业教育和培训机构等各类教育组织，支持线上教学、教务管理、学生评估、智能分析等多种教育场景。</p>
+                        <p>通过我们的教育云解决方案，您可以：</p>
+                        <ul>
+                            <li>建立高效、稳定的教育信息化平台</li>
+                            <li>简化IT运维管理，降低技术门槛</li>
+                            <li>提升教学质量和学习体验</li>
+                            <li>实现数据驱动的教育决策</li>
+                            <li>支持远程教学和混合式学习模式</li>
+                        </ul>
+                    </div>
+                    <div class="intro-image">
+<!--                        <img src="https://via.placeholder.com/500x300?text=教育云解决方案" alt="教育云解决方案">-->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="scenarios-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>应用场景</h2>
+                    <p>为各类教育场景提供专业解决方案，满足不同教育机构的信息化需求</p>
+                </div>
+                <div class="scenarios-grid">
+                    <div class="scenario-card">
+                        <div class="scenario-image">
+                            <i class="bi bi-mortarboard"></i>
+                        </div>
+                        <div class="scenario-content">
+                            <h3>线上教学平台</h3>
+                            <p>提供高质量的音视频直播、录播服务，支持在线互动教学、作业提交、课程管理等功能，满足远程教育需求</p>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-image">
+                            <i class="bi bi-window-stack"></i>
+                        </div>
+                        <div class="scenario-content">
+                            <h3>教务管理系统</h3>
+                            <p>集成课程安排、学生管理、成绩评估、资源分配等功能，实现教务工作的信息化和智能化</p>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-image">
+                            <i class="bi bi-clipboard-data"></i>
+                        </div>
+                        <div class="scenario-content">
+                            <h3>数据分析平台</h3>
+                            <p>基于大数据和AI技术，分析学习行为和教学效果，为教学决策提供数据支持，实现精准教学</p>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-image">
+                            <i class="bi bi-pc-display"></i>
+                        </div>
+                        <div class="scenario-content">
+                            <h3>虚拟实验室</h3>
+                            <p>通过云计算支持虚拟实验环境，为科学、工程、计算机等学科提供在线实验教学平台，降低教学成本</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>核心优势</h2>
+                    <p>专为教育行业打造的云服务特性，助力教育信息化建设</p>
+                </div>
+                <div class="features-container">
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h3>安全合规</h3>
+                                <p>提供多层次安全防护，保障师生数据和教学资源的安全，符合教育行业隐私保护要求</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-speedometer"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h3>高性能保障</h3>
+                                <p>确保在线教学平台的流畅性和稳定性，支持大规模并发访问，满足教育高峰期需求</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-pie-chart"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h3>数据智能</h3>
+                                <p>提供学习分析工具，通过AI技术评估学习效果，生成个性化学习路径和教学建议</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <i class="bi bi-coin"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h3>成本优化</h3>
+                                <p>灵活的计费模式和资源调度，帮助教育机构有效控制IT基础设施成本，提高资源利用率</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="features-image">
+<!--                        <img src="https://via.placeholder.com/500x300?text=教育云优势" alt="教育云优势">-->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="case-studies">
+            <div class="container">
+                <div class="section-header">
+                    <h2>成功案例</h2>
+                    <p>探索教育机构如何借助我们的云解决方案实现教育创新</p>
+                </div>
+                <div class="case-grid">
+                    <div class="case-card">
+                        <div class="case-image" style="background-image: url('https://via.placeholder.com/400x200?text=高校案例');"></div>
+                        <div class="case-content">
+                            <h3>某知名大学</h3>
+                            <p>基于我们的教育云平台构建了校园智能教学系统，支持100+专业课程的线上教学，实现了学习数据的智能分析，教学质量评估提高了35%。</p>
+                            <a href="#" class="case-link">了解详情 &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="case-card">
+                        <div class="case-image" style="background-image: url('https://via.placeholder.com/400x200?text=K12案例');"></div>
+                        <div class="case-content">
+                            <h3>某区域K12学校联盟</h3>
+                            <p>采用我们的教育管理解决方案，实现了50所学校的统一管理平台，教务效率提升40%，为20万师生提供统一的教学资源服务。</p>
+                            <a href="#" class="case-link">了解详情 &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="case-card">
+                        <div class="case-image" style="background-image: url('https://via.placeholder.com/400x200?text=培训机构案例');"></div>
+                        <div class="case-content">
+                            <h3>某全国性职业培训机构</h3>
+                            <p>利用我们的在线教育解决方案，构建了覆盖全国的职业技能培训平台，月活跃学员超过50万，课程完成率提高了45%。</p>
+                            <a href="#" class="case-link">了解详情 &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>开启教育数字化转型之旅</h2>
+                <p>我们的专业团队将为您提供个性化的教育云解决方案，助力您实现教育创新</p>
+                <div class="cta-buttons">
+                    <a href="/free-trial" class="btn-primary">免费试用</a>
+                    <a href="/contact" class="btn-secondary">联系我们</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>产品服务</h4>
+                    <a href="/products/cvm">云服务器</a>
+                    <a href="/products/security">云安全</a>
+                    <a href="/products/cos">云存储</a>
+                    <a href="/products/eip">网络服务</a>
+                </div>
+                <div class="footer-col">
+                    <h4>解决方案</h4>
+                    <a href="/solutions/finance">金融</a>
+                    <a href="/solutions/education">教育</a>
+                </div>
+                <div class="footer-col">
+                    <h4>开发者资源</h4>
+                    <a href="/developer/api">API文档</a>
+                    <a href="/developer/sdk">SDK</a>
+                    <a href="/developer">工具</a>
+                </div>
+                <div class="footer-col">
+                    <h4>关于我们</h4>
+                    <a href="/about">公司介绍</a>
+                    <a href="/contact">联系我们</a>
+                    <a href="/partners">合作伙伴</a>
+                    <a href="/terms">服务条款</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>友情链接</h4>
+                <div class="links-grid">
+                    <a href="https://fzero.fwh.is/link/index.php?i=1" target="_blank">合作伙伴链接</a>
+                    <a href="/partners">查看全部合作伙伴</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 简易云服务。保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
